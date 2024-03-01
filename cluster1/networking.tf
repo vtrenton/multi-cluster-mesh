@@ -21,7 +21,7 @@ resource "aws_route_table" "cluster1_route_table" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.rancher_cluster_gw.id
+    gateway_id = aws_internet_gateway.cluster1_gw.id
   }
 
   tags = {

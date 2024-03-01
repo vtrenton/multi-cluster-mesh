@@ -12,7 +12,7 @@ resource "aws_security_group_rule" "control_plane_to_worker" {
   to_port                  = 443
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.eks_worker_sg.id
-  security_group_id        = aws_eks_cluster.rancher_cluster.vpc_config[0].cluster_security_group_id
+  security_group_id        = aws_eks_cluster.cluster1.vpc_config[0].cluster_security_group_id
 }
 
 resource "aws_security_group" "eks_worker_sg" {
