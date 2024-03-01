@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 # Key for secrets encryption
-resource "aws_kms_key" "secrets_key" {
+resource "aws_kms_key" "secret_key" {
     description = "KMS key for Rancher Secret Encryption"
 }
 

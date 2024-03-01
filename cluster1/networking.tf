@@ -1,4 +1,4 @@
-resource "aws_vpc" "cluster1_lan" {
+resource "aws_vpc" "cluster_lan" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -7,7 +7,7 @@ resource "aws_vpc" "cluster1_lan" {
   }
 }
 
-resource "aws_internet_gateway" "cluster1_gw" {
+resource "aws_internet_gateway" "cluster_gw" {
   vpc_id = aws_vpc.cluster_lan.id
 
   tags = {
@@ -16,20 +16,20 @@ resource "aws_internet_gateway" "cluster1_gw" {
 }
 
 # Create a new route table for the VPC
-resource "aws_route_table" "cluster1_route_table" {
+resource "aws_route_table" "cluster_route_table" {
   vpc_id = aws_vpc.cluster_lan.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.cluster1_gw.id
+    gateway_id = aws_internet_gateway.cluster_gw.id
   }
 
   tags = {
-    Name = "cluster1_route_table"
+    Name = "cluster_route_table"
   }
 }
 
-resource "aws_subnet" "cluster1_sub_a" {
+resource "aws_subnet" "sub_a" {
   # vpc + 8 net bits = netsize of 10.0.0.0/24
   cidr_block        = cidrsubnet(aws_vpc.cluster_lan.cidr_block, var.az_subnet, 0)
   vpc_id            = aws_vpc.cluster_lan.id
@@ -40,7 +40,7 @@ resource "aws_subnet" "cluster1_sub_a" {
   }
 }
 
-resource "aws_subnet" "cluster1_sub_b" {
+resource "aws_subnet" "sub_b" {
   # vpc + 8 net bits == netsize of 10.0.1.0/24
   cidr_block        = cidrsubnet(aws_vpc.cluster_lan.cidr_block, var.az_subnet, 1)
   vpc_id            = aws_vpc.cluster_lan.id
