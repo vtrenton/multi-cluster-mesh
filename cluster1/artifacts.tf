@@ -6,7 +6,7 @@ resource "tls_private_key" "private_key" {
 
 resource "local_file" "private_key" {
   content         = tls_private_key.private_key.private_key_pem
-  filename        = "${path.module}/out/aws_private_key.pem"
+  filename        = "${path.module}/out/${var.priv_key_file}"
   file_permission = "0600"
 }
 resource "aws_key_pair" "generated_key" {
@@ -15,12 +15,12 @@ resource "aws_key_pair" "generated_key" {
 }
 
 # create Kubeconfig file based on below template
-data "aws_eks_cluster" "cluster1_data" {
-  name = aws_eks_cluster.cluster1.name
+data "aws_eks_cluster" "cluster_data" {
+  name = aws_eks_cluster.cluster.name
 }
 
-data "aws_eks_cluster_auth" "cluster1_auth" {
-  name = aws_eks_cluster.cluster1.name
+data "aws_eks_cluster_auth" "cluster_auth" {
+  name = aws_eks_cluster.cluster.name
 }
 
 locals {
@@ -28,19 +28,19 @@ locals {
 apiVersion: v1
 clusters:
 - cluster:
-    server: ${data.aws_eks_cluster.cluster1_data.endpoint}
-    certificate-authority-data: ${data.aws_eks_cluster.cluster1_data.certificate_authority[0].data}
-  name: ${data.aws_eks_cluster.cluster1_data.name}
+    server: ${data.aws_eks_cluster.cluster_data.endpoint}
+    certificate-authority-data: ${data.aws_eks_cluster.cluster_data.certificate_authority[0].data}
+  name: ${data.aws_eks_cluster.cluster_data.name}
 contexts:
 - context:
-    cluster: ${data.aws_eks_cluster.cluster1_data.name}
-    user: ${data.aws_eks_cluster.cluster1_data.name}
-  name: ${data.aws_eks_cluster.cluster1_data.name}
-current-context: ${data.aws_eks_cluster.cluster1_data.name}
+    cluster: ${data.aws_eks_cluster.cluster_data.name}
+    user: ${data.aws_eks_cluster.cluster_data.name}
+  name: ${data.aws_eks_cluster.cluster_data.name}
+current-context: ${data.aws_eks_cluster.cluster_data.name}
 kind: Config
 preferences: {}
 users:
-- name: ${data.aws_eks_cluster.cluster1_data.name}
+- name: ${data.aws_eks_cluster.cluster_data.name}
   user:
     exec:
       apiVersion: client.authentication.k8s.io/v1beta1
@@ -49,13 +49,13 @@ users:
         - "eks"
         - "get-token"
         - "--cluster-name"
-        - "${data.aws_eks_cluster.cluster1_data.name}"
+        - "${data.aws_eks_cluster.cluster_data.name}"
 KUBECONFIG
 }
 
 # Create the eksRancher.yaml file
 resource "local_file" "eks_config" {
-  filename        = "${path.module}/out/cluster1.yaml"
+  filename        = "${path.module}/out/${var.kubeconfig_file}"
   content         = local.kubeconfig
   file_permission = "600"
 }

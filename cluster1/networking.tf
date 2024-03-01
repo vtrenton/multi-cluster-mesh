@@ -36,7 +36,7 @@ resource "aws_subnet" "sub_a" {
   availability_zone = var.az_a
   map_public_ip_on_launch = true
   tags = {
-    Name = "cluster1_lan_a"
+    Name = "cluster_lan_a"
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_subnet" "sub_b" {
   availability_zone = var.az_b
   map_public_ip_on_launch = true
   tags = {
-    Name = "cluster1_lan_b"
+    Name = "cluster_lan_b"
   }
 }
 

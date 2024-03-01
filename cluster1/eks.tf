@@ -9,7 +9,7 @@ resource "aws_kms_key" "secret_key" {
 }
 
 # Create EKS Cluster for Rancher to live on
-resource "aws_eks_cluster" "cluster1" {
+resource "aws_eks_cluster" "cluster" {
     name     = var.cluster_name
     version  = var.cluster_version
     role_arn = aws_iam_role.eks_cluster_role.arn
@@ -39,7 +39,7 @@ resource "aws_eks_cluster" "cluster1" {
 }
 
 # launch config for workers
-resource "aws_launch_template" "cluster1_workers" {
+resource "aws_launch_template" "cluster_workers" {
     name_prefix   = "worker-"
     instance_type = var.instance_size
     
@@ -54,8 +54,8 @@ resource "aws_launch_template" "cluster1_workers" {
 }
 
 # Create a node group for the workers
-resource "aws_eks_node_group" "cluster1_node_group" {
-  cluster_name    = aws_eks_cluster.cluster1.name
+resource "aws_eks_node_group" "cluster_node_group" {
+  cluster_name    = aws_eks_cluster.cluster.name
   node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.eks_worker_role.arn
   subnet_ids      = [
@@ -72,11 +72,11 @@ resource "aws_eks_node_group" "cluster1_node_group" {
 
   # Specify the launch template and version
   launch_template {
-    id      = aws_launch_template.cluster1_workers.id
+    id      = aws_launch_template.cluster_workers.id
     version = "$Latest"
   }
 
   depends_on = [
-    aws_eks_cluster.cluster1
+    aws_eks_cluster.cluster
   ]
 }

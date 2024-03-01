@@ -28,6 +28,18 @@ variable "node_group_name" {
     description = "Name of the EKS node group"
 }
 
+variable "priv_key_file" {
+    type        = string
+    default     = "cluster1_key.pem"
+    description = "Private key output path for cluster ssh access"
+}
+
+variable "kubeconfig_file" {
+    type        = string
+    default     = "cluster1.yaml"
+    description = "Private key output path for cluster ssh access"
+}
+
 variable "vpc_cidr" {
     type        = string
     default     = "10.0.0.0/16"
