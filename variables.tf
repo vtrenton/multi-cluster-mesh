@@ -6,7 +6,7 @@ variable "aws_region" {
 
 variable "cluster_name" {
     type        = string
-    default     = "Cluster1"
+    default     = "cluster"
     description = "Name of the cluster"
 }
 
@@ -24,19 +24,19 @@ variable "instance_size" {
 
 variable "node_group_name" {
     type        = string
-    default     = "cluster1-node-group"
+    default     = "cluster-node-group"
     description = "Name of the EKS node group"
 }
 
 variable "priv_key_file" {
     type        = string
-    default     = "cluster1_key.pem"
+    default     = "cluster_key.pem"
     description = "Private key output path for cluster ssh access"
 }
 
 variable "kubeconfig_file" {
     type        = string
-    default     = "cluster1.yaml"
+    default     = "cluster.yaml"
     description = "Private key output path for cluster ssh access"
 }
 
@@ -66,13 +66,13 @@ variable "az_subnet" {
 
 variable "worker_iam_role_name" {
     type        = string
-    default     = "cluster1_worker"
+    default     = "cluster_worker"
     description = "Name of worker node iam role"
 }
 
 variable "cluster_iam_role_name" {
     type        = string
-    default     = "cluster1_cluster"
+    default     = "cluster_cluster"
     description = "name of the cluster IAM role"
 }
 
